@@ -2,6 +2,8 @@
 
 A high-performance, mobile-first React application designed to modernize the FOSSEE workshop registration experience. This portal features a SaaS-inspired "Elite" design, a private student dashboard, and intelligent workshop discovery.
 
+🔗 **Live Demo:** [https://fosse-repo.vercel.app](https://fosse-repo.vercel.app)
+
 ## 🌟 Visual Evolution (After)
 
 ````carousel
