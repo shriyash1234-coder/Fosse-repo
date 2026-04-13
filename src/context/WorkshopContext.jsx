@@ -7,6 +7,8 @@
  * Uses localStorage to ensure a persistent, industry-standard UX 
  * for academic registrations.
  */
+import React, { createContext, useState, useEffect, useContext } from 'react';
+
 const WorkshopContext = createContext();
 
 export const WorkshopProvider = ({ children }) => {

@@ -8,6 +8,11 @@
  * @param {Object} workshop - The active workshop data object
  * @param {Function} onClose - Callback to dismiss the modal
  */
+import React, { useState } from 'react';
+import { X, Calendar, Clock, User, GraduationCap, CheckCircle } from 'lucide-react';
+import RegistrationForm from './RegistrationForm';
+import './WorkshopDetailModal.css';
+
 const WorkshopDetailModal = ({ workshop, onClose }) => {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'syllabus' | 'register'
 

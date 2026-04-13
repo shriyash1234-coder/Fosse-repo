@@ -37,7 +37,7 @@ const Navbar = ({ onOpenDashboard, onGoHome }) => {
 
         {/* Mobile Controls */}
         <div className="mobile-controls">
-          <button onClick={toggleDarkMode} className="theme-toggle" aria-label="Toggle dark mode">
+          <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle dark mode">
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           <button className="mobile-menu-toggle" onClick={toggleMenu} aria-label="Toggle menu" aria-expanded={isOpen}>
