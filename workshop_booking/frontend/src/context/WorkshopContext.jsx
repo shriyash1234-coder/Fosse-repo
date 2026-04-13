@@ -1,5 +1,12 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
+/**
+ * WorkshopContext
+ * 
+ * Centralized state management for enrollment logic, notifications, 
+ * and persistent user preferences (Theme).
+ * 
+ * Uses localStorage to ensure a persistent, industry-standard UX 
+ * for academic registrations.
+ */
 const WorkshopContext = createContext();
 
 export const WorkshopProvider = ({ children }) => {

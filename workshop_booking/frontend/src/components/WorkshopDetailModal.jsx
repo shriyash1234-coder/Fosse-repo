@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
-import { X, Calendar, Clock, User, BookOpen, GraduationCap, CheckCircle } from 'lucide-react';
-import RegistrationForm from './RegistrationForm';
-import './WorkshopDetailModal.css';
-
+/**
+ * WorkshopDetailModal Component
+ * 
+ * Provides a high-fidelity 'drill-down' experience for workshop details.
+ * Features a tabbed interface for Overview, Syllabus, and Registration 
+ * to reduce cognitive load while maximizing information density.
+ * 
+ * @param {Object} workshop - The active workshop data object
+ * @param {Function} onClose - Callback to dismiss the modal
+ */
 const WorkshopDetailModal = ({ workshop, onClose }) => {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'syllabus' | 'register'
 
