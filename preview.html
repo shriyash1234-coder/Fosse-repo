@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOSSEE Elite - 2026 Workspace</title>
+    <!-- React UMD Builds -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-blur: 20px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --shadow-elite: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --ease-liquid: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme='dark'] {
+            --primary: #3b82f6;
+            --bg-main: #020617;
+            --bg-card: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+            --glass-bg: rgba(15, 23, 42, 0.5);
+            --glass-border: rgba(30, 41, 59, 0.5);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-main); 
+            color: var(--text-main); 
+            transition: background-color 0.4s ease; 
+            overflow-x: hidden; 
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
+
+        /* Global Mesh Background */
+        .mesh-bg { 
+            position: fixed; 
+            inset: 0; 
+            z-index: -1; 
+            background: var(--bg-main); 
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.1) 0px, transparent 50%), 
+                radial-gradient(at 100% 0%, rgba(129, 140, 248, 0.1) 0px, transparent 50%), 
+                radial-gradient(at 100% 100%, rgba(37, 99, 235, 0.05) 0px, transparent 50%), 
+                radial-gradient(at 0% 100%, rgba(129, 140, 248, 0.05) 0px, transparent 50%); 
+        }
+
+        /* Navigation */
+        .navbar { 
+            position: sticky; 
+            top: 0; 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(var(--glass-blur)); 
+            border-bottom: 1px solid var(--glass-border); 
+            z-index: 1000; 
+            padding: 1.25rem 0; 
+        }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 900; font-size: 1.5rem; color: var(--primary); cursor: pointer; letter-spacing: -2px; text-transform: uppercase; }
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+        .nav-btn { background: none; border: none; font-weight: 800; color: var(--text-main); cursor: pointer; transition: 0.2s; font-size: 0.95rem; text-transform: uppercase; }
+        .nav-btn:hover { color: var(--primary); transform: translateY(-1px); }
+
+        /* Hero Elite Styling */
+        .hero-elite { padding: 6rem 0; text-align: center; }
+        .hero-elite h1 { 
+            font-size: clamp(3rem, 10vw, 6rem); 
+            font-weight: 900; 
+            letter-spacing: -5px; 
+            line-height: 0.9; 
+            margin-bottom: 1.5rem; 
+            background: linear-gradient(to bottom right, var(--text-main), var(--primary)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .hero-elite p { font-size: 1.4rem; color: var(--text-muted); max-width: 800px; margin: 0 auto; letter-spacing: -0.5px; }
+
+        /* Listing Grid & Elite Card */
+        .elite-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 3rem; margin-top: 4rem; }
+        
+        .workshop-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.5s var(--ease-liquid);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .workshop-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary);
+        }
+
+        .card-image-top {
+            height: 140px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(129, 140, 248, 0.1) 100%);
+            position: relative;
+            padding: 1.5rem;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--primary);
+        }
+
+        .status-badge-elite {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--primary);
+        }
+
+        .card-content { padding: 2.5rem; flex-grow: 1; }
+        .card-title-elite { font-size: 2rem; font-weight: 900; line-height: 1; letter-spacing: -1.5px; margin-bottom: 1rem; color: var(--text-main); }
+        .card-description { color: var(--text-muted); font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem; }
+
+        /* Dashboard Bento Layout */
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(200px, auto); gap: 2rem; }
+        .bento-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2.5rem; transition: all 0.4s var(--ease-liquid); position: relative; overflow: hidden; }
+        .bento-item:hover { border-color: var(--primary); transform: translateY(-6px); box-shadow: var(--shadow-elite); }
+        .bento-glass { background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur)); border: 1px solid var(--glass-border); }
+
+        .span-2 { grid-column: span 2; }
+        .row-span-2 { grid-row: span 2; }
+
+        .tile-welcome h2 { font-size: 4rem; font-weight: 900; letter-spacing: -4px; line-height: 0.9; margin-bottom: 1rem; }
+        .progress-circle { 
+            width: 160px; 
+            height: 160px; 
+            border-radius: 50%; 
+            background: radial-gradient(closest-side, var(--bg-card) 79%, transparent 80%), 
+                        conic-gradient(var(--primary) calc(var(--p) * 1%), var(--border) 0); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 2rem auto; 
+            font-size: 2.5rem; 
+            font-weight: 900; 
+        }
+
+        /* Modal & Tabs */
+        .modal-elite-overlay { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.9); backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 2rem; }
+        .modal-elite { background: var(--bg-card); border-radius: var(--radius-xl); max-width: 1000px; width: 100%; position: relative; animation: eliteShow 0.6s var(--ease-liquid); display: grid; grid-template-columns: 320px 1fr; min-height: 600px; overflow: hidden; border: 1px solid var(--glass-border); }
+        @keyframes eliteShow { from { opacity: 0; transform: scale(0.95) translateY(40px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+        .modal-sidebar { background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(129, 140, 248, 0.1)); padding: 4rem 2.5rem; border-right: 1px solid var(--border); }
+        .modal-main { padding: 4rem; position: relative; overflow-y: auto; }
+
+        .tab-row { display: flex; gap: 2.5rem; border-bottom: 1px solid var(--border); margin-bottom: 3rem; }
+        .tab { padding-bottom: 1rem; font-weight: 800; color: var(--text-muted); cursor: pointer; position: relative; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        .tab.active { color: var(--primary); }
+        .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--primary); }
+
+        .syllabus-item { display: flex; gap: 1.5rem; margin-bottom: 2rem; align-items: flex-start; }
+        .day-num { background: var(--primary); color: white; width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; }
+
+        .btn-elite-primary { background: var(--primary); color: white; padding: 1.25rem 2.5rem; border-radius: var(--radius-md); font-weight: 900; border: none; cursor: pointer; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
+        .btn-elite-primary:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4); }
+
+        /* Form Styling */
+        .elite-form { display: flex; flex-direction: column; gap: 1.5rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group label { font-weight: 800; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); }
+        .form-group input, .form-group select { padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-main); font-family: inherit; font-weight: 600; font-size: 1rem; }
+        .form-group input:focus { outline: none; border-color: var(--primary); }
+
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        const MOCK_DATA = [
+            { 
+                id: 1, 
+                title: 'Python for Beginners', 
+                cat: 'Python', 
+                participants: 145, 
+                date: 'Oct 24, 2026', 
+                duration: '12 Hours',
+                instructor: 'Dr. Sameer Sahasrabudhe',
+                desc: 'The definitive guide to open-source programming. Build your foundation with industry standards.', 
+                syllabus: ['Environment Setup', 'Data Structures', 'Functions & Modules', 'API & OOP Fundamentals'] 
+            },
+            { 
+                id: 2, 
+                title: 'Arduino & IoT Fundamentals', 
+                cat: 'IoT', 
+                participants: 88, 
+                date: 'Oct 28, 2026', 
+                duration: '16 Hours',
+                instructor: 'Prof. Rajesh Zele',
+                desc: 'Connect physical hardware to the digital cloud through open-source ecosystems.', 
+                syllabus: ['Circuit Theory', 'Microcontrollers', 'Wi-Fi & Bluetooth', 'Cloud Dashboards'] 
+            },
+            { 
+                id: 3, 
+                title: 'Advanced Scilab for Engineers', 
+                cat: 'Scilab', 
+                participants: 120, 
+                date: 'Nov 02, 2026', 
+                duration: '10 Hours',
+                instructor: 'Prof. Kannan Moudgalya',
+                desc: 'High-performance mathematical modeling at scale for modern engineering research.', 
+                syllabus: ['Matrix Operations', 'Simulations', 'Control Systems', 'Advanced Plotting'] 
+            },
+            { 
+                id: 4, 
+                title: 'Full-Stack Web Architect', 
+                cat: 'Web', 
+                participants: 62, 
+                date: 'Nov 15, 2026', 
+                duration: '24 Hours',
+                instructor: 'Elite Web Team, IITB',
+                desc: 'Master React, Node.js, and modern industry workflows to build robust platforms.', 
+                syllabus: ['React Components', 'Node Frameworks', 'Database Design', 'CI/CD Pipelines'] 
+            }
+        ];
+
+        function App() {
+            const [view, setView] = useState('listing');
+            const [selected, setSelected] = useState(null);
+            const [bookings, setBookings] = useState([]);
+            const [activeTab, setActiveTab] = useState('Overview');
+            const [formStep, setFormStep] = useState('info'); // 'info' | 'register'
+
+            const toggleTheme = () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+            };
+
+            const confirmBooking = () => {
+                if(bookings.find(b => b.id === selected.id)) return;
+                setBookings([...bookings, selected]);
+                setSelected(null);
+                setFormStep('info');
+            };
+
+            return (
+                <div>
+                    <div className="mesh-bg"></div>
+                    <nav className="navbar">
+                        <div className="container nav-content">
+                            <h1 className="logo" onClick={() => setView('listing')}>FOSSEE ELITE</h1>
+                            <div className="nav-links">
+                                <button className="nav-btn" onClick={() => setView('listing')}>Catalog</button>
+                                <button className="nav-btn" onClick={() => setView('dash')}>Dashboard</button>
+                                <button className="nav-btn" onClick={toggleTheme}>☀/🌙</button>
+                                <button className="btn-elite-primary" style={{marginTop: 0, padding: '12px 24px', width: 'auto'}} onClick={() => setView('dash')}>Academic Portal</button>
+                            </div>
+                        </div>
+                    </nav>
+
+                    {view === 'listing' ? (
+                        <div className="container" style={{paddingBottom: '10rem'}}>
+                            <div className="hero-elite">
+                                <div style={{background: 'rgba(37, 99, 235, 0.1)', color: 'var(--primary)', padding: '8px 20px', borderRadius: '30px', display: 'inline-block', fontWeight: 900, fontSize: '0.8rem', marginBottom: '2rem'}}>2026 TOP TIER EDUCATION</div>
+                                <h1>Master Tomorrow's<br/>Technology Today.</h1>
+                                <p>Premium FLOSS workshops delivered by IIT Bombay experts. Built for the modern global engineer.</p>
+                            </div>
+
+                            <div className="elite-grid">
+                                {MOCK_DATA.map(w => (
+                                    <div key={w.id} className="workshop-card animate-fade-in" onClick={() => setSelected(w)}>
+                                        <div className="card-image-top">
+                                            <div className="category-badge">{w.cat}</div>
+                                            <div className="status-badge-elite">Enrollment Open</div>
+                                        </div>
+                                        <div className="card-content">
+                                            <h3 className="card-title-elite">{w.title}</h3>
+                                            <p className="card-description">{w.desc}</p>
+                                            <div style={{display: 'flex', gap: '1.5rem', marginTop: '2rem'}}>
+                                                <span style={{fontWeight: 800, color: 'var(--text-muted)', fontSize: '0.9rem'}}>📅 {w.date}</span>
+                                                <span style={{fontWeight: 800, color: 'var(--text-muted)', fontSize: '0.9rem'}}>👤 {w.participants} Registered</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="container" style={{padding: '5rem 0 10rem'}}>
+                            <div className="bento-grid">
+                                <div className="bento-item bento-glass span-2 tile-welcome">
+                                    <h2 style={{fontSize: '4.5rem'}}>Elite Workspace</h2>
+                                    <p style={{color: 'var(--text-muted)', fontSize: '1.3rem'}}>Welcome back, John. Your current progress is top 5% in the region.</p>
+                                    <div className="ai-recommendation" style={{marginTop: '2rem', display: 'flex', gap: '12px', background: 'rgba(37, 99, 235, 0.1)', padding: '15px', borderRadius: '15px', color: 'var(--primary)', fontWeight: 800, width: 'fit-content'}}>
+                                        <span>AI Suggestion: Master VLSI Fabrication based on your recent activity.</span>
+                                    </div>
+                                </div>
+                                
+                                <div className="bento-item bento-glass row-span-2">
+                                    <h3 style={{textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px', color: 'var(--text-muted)'}}>Certification Progress</h3>
+                                    <div className="progress-circle" style={{'--p': `${(bookings.length / 4) * 100}`}}>
+                                        {Math.round((bookings.length / 4) * 100)}%
+                                    </div>
+                                    <p style={{textAlign: 'center', fontWeight: 800}}>FOSSEE Master Track</p>
+                                    <button className="btn-elite-primary" style={{marginTop: '2rem', width: '100%'}}>View Portfolio</button>
+                                </div>
+
+                                <div className="bento-item bento-glass span-2 row-span-2">
+                                    <h3 style={{textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px', color: 'var(--text-muted)', marginBottom: '2rem'}}>Academic Track ({bookings.length})</h3>
+                                    {bookings.map(b => (
+                                        <div key={b.id} style={{padding: '1.5rem', background: 'var(--bg-main)', borderRadius: '16px', marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                            <div>
+                                                <div style={{fontWeight: 900, fontSize: '1.25rem', letterSpacing: '-1px'}}>{b.title}</div>
+                                                <div style={{color: 'var(--text-muted)', fontSize: '0.9rem'}}>{b.date} • Interactive Live Session</div>
+                                            </div>
+                                            <button style={{background: 'none', border: 'none', color: '#ef4444', fontWeight: 900, cursor: 'pointer', fontSize: '0.9rem'}} onClick={() => setBookings(bookings.filter(x => x.id !== b.id))}>Withdraw</button>
+                                        </div>
+                                    ))}
+                                    {bookings.length === 0 && <p style={{color: 'var(--text-muted)', textAlign: 'center', padding: '5rem'}}>No active enrollments for this term.</p>}
+                                </div>
+
+                                <div className="bento-item bento-glass">
+                                    <h3 style={{textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px', color: 'var(--text-muted)'}}>Skill Credits</h3>
+                                    <div style={{fontSize: '4rem', fontWeight: 900, margin: '10px 0', letterSpacing: '-4px'}}>{bookings.length * 15}</div>
+                                    <p style={{fontSize: '0.9rem', fontWeight: 800}}>Academic Points Earned</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {selected && (
+                        <div className="modal-elite-overlay">
+                            <div className="modal-elite">
+                                <div className="modal-sidebar">
+                                    <div className="category-badge" style={{marginBottom: '2rem'}}>{selected.cat}</div>
+                                    <h2 style={{fontSize: '3rem', fontWeight: 900, lineHeight: 1, letterSpacing: '-2px', marginBottom: '2.5rem'}}>{selected.title}</h2>
+                                    <div style={{display: 'flex', flexDirection: 'column', gap: '1.5rem'}}>
+                                        <div style={{display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-muted)'}}>
+                                            <span style={{fontWeight: 900, color: 'var(--primary)'}}>📅</span>
+                                            <span style={{fontWeight: 700}}>{selected.date}</span>
+                                        </div>
+                                        <div style={{display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-muted)'}}>
+                                            <span style={{fontWeight: 900, color: 'var(--primary)'}}>⏱</span>
+                                            <span style={{fontWeight: 700}}>{selected.duration}</span>
+                                        </div>
+                                        <div style={{display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-muted)'}}>
+                                            <span style={{fontWeight: 900, color: 'var(--primary)'}}>👤</span>
+                                            <span style={{fontWeight: 700}}>{selected.instructor}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="modal-main">
+                                    <span style={{position: 'absolute', top: '2rem', right: '3rem', fontSize: '3rem', fontWeight: 900, cursor: 'pointer', color: 'var(--text-muted)'}} onClick={() => { setSelected(null); setFormStep('info'); }}>&times;</span>
+                                    
+                                    <div className="tab-row">
+                                        <div className={`tab ${formStep === 'info' ? 'active' : ''}`} onClick={() => setFormStep('info')}>Details</div>
+                                        <div className={`tab ${formStep === 'register' ? 'active' : ''}`} onClick={() => setFormStep('register')}>Register</div>
+                                    </div>
+
+                                    {formStep === 'info' ? (
+                                        <div className="animate-fade-in">
+                                            <div className="tab-row" style={{border: 'none', margin: '0 0 1rem'}}>
+                                                {['Overview', 'Syllabus'].map(t => (
+                                                    <div key={t} className={`tab ${activeTab === t ? 'active' : ''}`} onClick={() => setActiveTab(t)}>{t}</div>
+                                                ))}
+                                            </div>
+
+                                            <div style={{minHeight: '250px'}}>
+                                                {activeTab === 'Overview' ? (
+                                                    <div className="animate-fade-in">
+                                                        <p style={{fontSize: '1.25rem', lineHeight: 1.6, color: 'var(--text-main)', marginBottom: '2rem'}}>{selected.desc} Join top-tier faculty for an intensive hybrid training session.</p>
+                                                        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '2rem'}}>
+                                                            <div style={{padding: '1.5rem', border: '1px solid var(--border)', borderRadius: '16px'}}>
+                                                                <div style={{fontWeight: 900, fontSize: '1.5rem'}}>Certification</div>
+                                                                <div style={{fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)'}}>Academic Level</div>
+                                                            </div>
+                                                            <div style={{padding: '1.5rem', border: '1px solid var(--border)', borderRadius: '16px'}}>
+                                                                <div style={{fontWeight: 900, fontSize: '1.5rem'}}>Live Lab</div>
+                                                                <div style={{fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)'}}>Practical Exposure</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <div className="animate-fade-in">
+                                                        {selected.syllabus.map((item, idx) => (
+                                                            <div key={idx} className="syllabus-item">
+                                                                <div className="day-num">{idx + 1}</div>
+                                                                <div>
+                                                                    <div style={{fontWeight: 900, fontSize: '1.1rem', marginBottom: '2px'}}>{item}</div>
+                                                                    <p style={{color: 'var(--text-muted)', fontSize: '0.85rem'}}>Interactive lecture followed by simulated laboratory work.</p>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <button className="btn-elite-primary" style={{width: '100%', marginTop: '3rem'}} onClick={() => setFormStep('register')}>Enroll in Workshop</button>
+                                        </div>
+                                    ) : (
+                                        <div className="elite-form animate-fade-in">
+                                            <div className="form-group">
+                                                <label>Full Name</label>
+                                                <input type="text" placeholder="John Doe" />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Institutional Email</label>
+                                                <input type="email" placeholder="john@iitb.ac.in" />
+                                            </div>
+                                            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>
+                                                <div className="form-group">
+                                                    <label>Department</label>
+                                                    <select>
+                                                        <option>Computer Science</option>
+                                                        <option>Electrical Eng.</option>
+                                                        <option>Mechanical Eng.</option>
+                                                    </select>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Phone Number</label>
+                                                    <input type="text" placeholder="+91 98765 43210" />
+                                                </div>
+                                            </div>
+                                            <button className="btn-elite-primary" style={{width: '100%', marginTop: '1rem'}} onClick={confirmBooking}>Finalize Academic Enrollment</button>
+                                            <button style={{background: 'none', border: 'none', color: 'var(--text-muted)', fontWeight: 800, cursor: 'pointer', marginTop: '1rem'}} onClick={() => setFormStep('info')}>← Back to Details</button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+        setTimeout(() => lucide.createIcons(), 100);
+    </script>
+</body>
+</html>
