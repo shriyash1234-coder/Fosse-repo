@@ -44,9 +44,8 @@ The most challenging part was ensuring a **Zero-Dependency runnable state** in a
 ## 🛠️ Setup & Running
 
 ### Option A: Standard Development (Recommended)
-1. `cd workshop_booking/frontend`
-2. `npm install` (Requires Node.js)
-3. `npm run dev`
+1. `npm install` (Requires Node.js)
+2. `npm run dev`
 
 ### Option B: Quick Preview (No-Node)
 1. View the live version immediately via the hosted `preview.html`.
